@@ -188,11 +188,17 @@
    TIME EXPIRED ANIMATIONS - Shake & Pulse
    ============================================ */
 
-/* Shake animation for expired devices */
+/* Shake animation for expired devices - MORE AGGRESSIVE */
 @keyframes shake-attention {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-  20%, 40%, 60%, 80% { transform: translateX(8px); }
+  0%, 100% { 
+    transform: translateX(0) rotate(0deg); 
+  }
+  10%, 30%, 50%, 70%, 90% { 
+    transform: translateX(-10px) rotate(-1deg); 
+  }
+  20%, 40%, 60%, 80% { 
+    transform: translateX(10px) rotate(1deg); 
+  }
 }
 
 @keyframes pulse-glow {
@@ -201,41 +207,61 @@
     border-color: rgba(239, 68, 68, 0.3);
   }
   50% {
-    box-shadow: 0 0 20px 5px rgba(239, 68, 68, 0.4);
-    border-color: rgba(239, 68, 68, 0.8);
+    box-shadow: 0 0 30px 8px rgba(239, 68, 68, 0.6);
+    border-color: rgba(239, 68, 68, 1);
   }
 }
 
-/* Apply to device card when time expired */
+/* Apply to device card when time expired - ENHANCED */
 .device-card.time-expired {
-  animation: shake-attention 0.6s infinite;
-  border: 2px solid #ef4444 !important;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05)) !important;
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3) !important;
+  animation: shake-attention 0.5s infinite, pulse-glow 2s infinite;
+  border: 3px solid #ef4444 !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.15)) !important;
+  box-shadow: 0 0 40px rgba(239, 68, 68, 0.5), inset 0 0 20px rgba(239, 68, 68, 0.1) !important;
+  position: relative;
+  z-index: 10;
 }
 
-/* Pulse animation for expired badge */
+/* Add flashing background overlay */
+.device-card.time-expired::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(45deg, transparent 30%, rgba(239, 68, 68, 0.2) 50%, transparent 70%);
+  animation: flash-overlay 3s infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes flash-overlay {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Pulse animation for expired badge - STRONGER */
 @keyframes pulse-shake-badge {
   0%, 100% {
     transform: scale(1);
-    background: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.3);
   }
   50% {
-    transform: scale(1.05);
-    background: rgba(239, 68, 68, 0.3);
+    transform: scale(1.1);
+    background: rgba(239, 68, 68, 0.5);
   }
 }
 
 .badge-expired {
-  background: rgba(239, 68, 68, 0.2) !important;
-  color: #ef4444 !important;
-  border: 1px solid rgba(239, 68, 68, 0.5) !important;
-  font-weight: 800 !important;
-  animation: pulse-shake-badge 1s infinite;
+  background: rgba(239, 68, 68, 0.3) !important;
+  color: #fef2f2 !important;
+  border: 2px solid rgba(239, 68, 68, 0.8) !important;
+  font-weight: 900 !important;
+  animation: pulse-shake-badge 0.8s infinite;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
 }
 
 .pulse-shake {
-  animation: pulse-shake-badge 1s infinite;
+  animation: pulse-shake-badge 0.8s infinite;
 }
 
 /* Extra attention glow for timer display */
