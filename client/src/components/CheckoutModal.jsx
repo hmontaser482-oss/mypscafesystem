@@ -82,14 +82,18 @@ export default function CheckoutModal({ isOpen, onClose, device, onCheckoutCompl
     setErrorMsg('');
 
     try {
-      if (remainingDue > 0 && paymentMethod !== 'credit') {
-        throw new Error(`المبلغ المدفوع (${numPaid} ج.م) أقل من المطلوب (${grandTotal} ج.م). يرجى سداد المبلغ كاملاً أو اختيار الدفع الآجل.`);
+      // Fix: Round both values to 2 decimal places before comparison to avoid floating point errors
+      const roundedPaid = Math.round(numPaid * 100) / 100;
+      const roundedTotal = Math.round(grandTotal * 100) / 100;
+      
+      if (roundedPaid < roundedTotal && paymentMethod !== 'credit') {
+        throw new Error(`المبلغ المدفوع (${roundedPaid} ج.م) أقل من المطلوب (${roundedTotal} ج.م). يرجى سداد المبلغ كاملاً أو اختيار الدفع الآجل.`);
       }
 
       const res = await authFetch(`/api/sessions/${sId}/checkout`, {
         method: 'POST',
         body: JSON.stringify({
-          paidAmount: numPaid,
+          paidAmount: roundedPaid,
           paymentMethod,
           discountAmount: computedDiscount,
           discountType,
