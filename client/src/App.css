@@ -182,3 +182,74 @@
     border-right-color: var(--border);
   }
 }
+
+
+/* ============================================
+   TIME EXPIRED ANIMATIONS - Shake & Pulse
+   ============================================ */
+
+/* Shake animation for expired devices */
+@keyframes shake-attention {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(239, 68, 68, 0.4);
+    border-color: rgba(239, 68, 68, 0.8);
+  }
+}
+
+/* Apply to device card when time expired */
+.device-card.time-expired {
+  animation: shake-attention 0.6s infinite;
+  border: 2px solid #ef4444 !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05)) !important;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Pulse animation for expired badge */
+@keyframes pulse-shake-badge {
+  0%, 100% {
+    transform: scale(1);
+    background: rgba(239, 68, 68, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    background: rgba(239, 68, 68, 0.3);
+  }
+}
+
+.badge-expired {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.5) !important;
+  font-weight: 800 !important;
+  animation: pulse-shake-badge 1s infinite;
+}
+
+.pulse-shake {
+  animation: pulse-shake-badge 1s infinite;
+}
+
+/* Extra attention glow for timer display */
+.device-card.time-expired .live-timer-val,
+.device-card.time-expired .live-cost-val {
+  color: #ef4444 !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* Stop button glow when time expired */
+.device-card.time-expired .btn-danger {
+  animation: pulse-glow 1.5s infinite;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
+}

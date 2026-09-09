@@ -42,14 +42,14 @@ export default function DeviceCard({
     }
   }, [liveTicks, device.id, activeSession?.id]);
 
-  // Increment elapsed seconds locally if running
+  // Increment elapsed seconds locally if running (STOP if time expired!)
   useEffect(() => {
-    if (!isRunning || !activeSession) return;
+    if (!isRunning || !activeSession || isExpired) return; // Stop counting if time expired
     const interval = setInterval(() => {
       setElapsedSeconds(prev => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [isRunning, activeSession]);
+  }, [isRunning, activeSession, isExpired]);
 
   // Format HH:MM:SS
   const formatTime = (totalSec) => {
@@ -83,8 +83,8 @@ export default function DeviceCard({
     remainingPercent = Math.min(100, Math.max(0, (remainingSec / totalTargetSec) * 100));
   }
 
-  // Card status class
-  const cardStatusClass = isRunning ? 'running' : isAvailable ? 'available' : isMaintenance ? 'maintenance' : '';
+  // Card status class (add shake animation for expired sessions)
+  const cardStatusClass = isExpired ? 'time-expired shake-attention' : isRunning ? 'running' : isAvailable ? 'available' : isMaintenance ? 'maintenance' : '';
 
   return (
     <div className={`device-card ${cardStatusClass}`}>
@@ -120,7 +120,8 @@ export default function DeviceCard({
             </span>
           )}
           {isExpired && (
-            <span className="badge badge-fixed">
+            <span className="badge badge-expired pulse-shake">
+              <AlertTriangle size={13} />
               {t('time_expired')}
             </span>
           )}
