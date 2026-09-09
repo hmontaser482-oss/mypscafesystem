@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Gamepad2, Play, Pause, Square, Plus, ArrowRightLeft, Clock,
-  DollarSign, Wrench, ShieldAlert, Sparkles, User, Coffee, CheckCircle2
+  DollarSign, Wrench, ShieldAlert, Sparkles, User, Coffee, CheckCircle2, AlertTriangle
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useSocket } from '../context/SocketContext';
