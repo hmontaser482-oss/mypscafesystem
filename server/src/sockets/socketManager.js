@@ -38,20 +38,25 @@ function initSockets(socketIoInstance) {
               db.prepare(`UPDATE sessions SET status = 'time_expired', updated_at = datetime('now', 'localtime') WHERE id = ?`).run(s.id);
               db.prepare(`UPDATE devices SET status = 'time_expired' WHERE id = ?`).run(s.device_id);
               
+              // Get device name for notification
+              const device = db.prepare(`SELECT name FROM devices WHERE id = ?`).get(s.device_id);
+              const deviceName = device?.name || s.device_id;
+              
               // Broadcast expiry notification
               const notifId = 'notif_' + Date.now();
-              const notifMsg = `انتهى وقت الجلسة للجهاز المحدد (${s.device_id})`;
+              const notifMsg = `انتهى وقت الجلسة للجهاز ${deviceName} - يرجى المحاسبة`;
               db.prepare(`
                 INSERT INTO notifications (id, type, title, message, reference_id)
-                VALUES (?, 'session_expired', 'تنبيه انتهاء الوقت', ?, ?)
+                VALUES (?, 'session_expired', 'تنبيه انتهاء الوقت ⏰', ?, ?)
               `).run(notifId, notifMsg, s.device_id);
 
               io.emit('notification:new', {
                 id: notifId,
                 type: 'session_expired',
-                title: 'تنبيه انتهاء الوقت',
+                title: 'تنبيه انتهاء الوقت ⏰',
                 message: notifMsg,
-                deviceId: s.device_id
+                deviceId: s.device_id,
+                deviceName: deviceName
               });
 
               io.emit('device:updated', { deviceId: s.device_id, status: 'time_expired' });
