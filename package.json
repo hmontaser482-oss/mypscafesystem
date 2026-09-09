@@ -1,0 +1,29 @@
+{
+  "name": "ps-lounge-manager",
+  "version": "1.0.0",
+  "description": "نظام إدارة مركز ألعاب البلايستيشن المتكامل والاحترافي (PlayStation Lounge Management System)",
+  "scripts": {
+    "server": "node server/src/server.js",
+    "client": "npm --prefix client run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "node server/src/server.js",
+    "build": "npm --prefix client run build",
+    "postinstall": "cd server && npm install",
+    "seed": "node server/src/db/seed.js"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "keywords": [
+    "playstation",
+    "gaming-center",
+    "pos",
+    "billing",
+    "ps-cafe"
+  ],
+  "author": "PS Lounge Manager Team",
+  "license": "ISC",
+  "devDependencies": {
+    "javascript-obfuscator": "^5.6.0"
+  }
+}
